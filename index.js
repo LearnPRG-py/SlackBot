@@ -20,6 +20,7 @@ app.command("/gitlogger-add-repo", async ({command, ack, respond}) => {
   const [owner, repo, name] = command.text.trim().split(/\s+/);
   if (!(repo && owner && name)) {
     await respond({ text: `Please enter a value for all inputs!` });
+    return;
   }
   if (repo_map.has(name)) {
     await respond({ text: `Repo ${name} already exists!` });
@@ -50,6 +51,7 @@ app.command("/gitlogger-log", async ({command, ack, respond}) => {
   let data = repo_map.get(name);
   if (!data) {
     await respond({text: `Repo with name ${name} hasn't been added yet!`});
+    return;
   }
   const [owner, repo] = data.trim().split('/');
   try {
@@ -65,6 +67,7 @@ app.command("/gitlogger-log", async ({command, ack, respond}) => {
                             1. Try again after ~5 minutes (API might be rate limited)
                             2. Double check the owner annd repo provided.
                             3. Remove and re-add the repo.`})
+    return;
   }
   text ? await respond({ text: `Logging last ${log_count} commits from ${name}: \n ${text}`}) : await respond({ text: `Logging last ${log_count} commits from ${name} failed!`});
 });
